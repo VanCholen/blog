@@ -1,0 +1,117 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="深度学习之训练集、验证集、测试集"><meta name="keywords" content="深度学习"><meta name="author" content="小王同学"><meta name="copyright" content="小王同学"><title>深度学习之训练集、验证集、测试集 | 小王同学的精神驿站</title><link rel="shortcut icon" href="/melody-favicon.ico"><link rel="stylesheet" href="/css/index.css?version=1.9.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.0"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css?version=1.9.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.1.1/dist/instantsearch.min.css"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.1.1/dist/instantsearch.min.js" defer></script><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script src="https://v1.hitokoto.cn/?encode=js&amp;charset=utf-8&amp;select=.footer_custom_text" defer></script><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: {"appId":"LZQCIQZ454","apiKey":"97649af295e704cd4588883b375c23ef","indexName":"mySearch","hits":{"per_page":10},"languages":{"input_placeholder":"搜索文章","hits_empty":"找不到您查询的内容:${query}","hits_stats":"找到 ${hits} 条结果，用时 ${time} 毫秒"}},
+  localSearch: undefined,
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  hexoVersion: '5.4.0'
+} </script><meta name="generator" content="Hexo 5.4.0"></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">1.training dataset（训练集）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">2.validation dataset（验证集）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">3.test dataset（测试集）</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">4.如何划分数据集</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">4.1 三种主流的交叉验证法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#4-2-%E7%95%99%E5%87%BA%E6%B3%95%EF%BC%88Holdout-cross-validation%EF%BC%89"><span class="toc-text">4.2 留出法（Holdout cross validation）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-3-%E7%95%99%E4%B8%80%E6%B3%95%EF%BC%88Leave-one-out-cross-validation%EF%BC%89"><span class="toc-text">4.3 留一法（Leave one out cross validation）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-4-k-%E6%8A%98%E4%BA%A4%E5%8F%89%E9%AA%8C%E8%AF%81%EF%BC%88k-fold-cross-validation%EF%BC%89"><span class="toc-text">4.4 k 折交叉验证（k-fold cross validation）</span></a></li></ol></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/img/avatar.png"></div><div class="author-info__name text-center">小王同学</div><div class="author-info__description text-center">心中有梦，眼里有光</div><div class="follow-button"><a target="_blank" rel="noopener" href="https://github.com/VanCholen">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">56</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">31</span></a><a class="author-info-articles__categories article-meta" href="/categories"><span class="pull-left">分类</span><span class="pull-right">22</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">友情链接-Links</div><a class="author-info-links__name text-center" target="_blank" rel="noopener" href="https://github.com/VanCholen">GitHub</a><a class="author-info-links__name text-center">WeiBo</a><a class="author-info-links__name text-center">CSDN</a><a class="author-info-links__name text-center">知乎</a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(/img/wallhaven-8ogod1.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">小王同学的精神驿站</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a><a class="site-page" href="/about">About</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="post-info"><div id="post-title">深度学习之训练集、验证集、测试集</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2019-05-17</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/">机器学习</a><span class="post-meta__separator">|</span><i class="fa fa-comment-o post-meta__icon" aria-hidden="true"></i><a href="/2019/05/17/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%AE%AD%E7%BB%83%E9%9B%86%E3%80%81%E9%AA%8C%E8%AF%81%E9%9B%86%E3%80%81%E6%B5%8B%E8%AF%95%E9%9B%86/#disqus_thread"><span class="disqus-comment-count" data-disqus-identifier="2019/05/17/深度学习之训练集、验证集、测试集/"></span></a><div class="post-meta-wordcount"><span>字数总计: </span><span class="word-count">952</span><span class="post-meta__separator">|</span><span>阅读时长: 2 分钟</span></div></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><p>类比:</p>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p><strong>训练集相当于上课学知识</strong></p>
+</li>
+<li class="lvl-2">
+<p><strong>验证集相当于课后的的练习题，用来纠正和强化学到的知识</strong></p>
+</li>
+<li class="lvl-2">
+<p><strong>测试集相当于期末考试，用来最终评估学习效果</strong></p>
+</li>
+</ul>
+<span id="more"></span>
+<p><img src="/2019/05/17/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%AE%AD%E7%BB%83%E9%9B%86%E3%80%81%E9%AA%8C%E8%AF%81%E9%9B%86%E3%80%81%E6%B5%8B%E8%AF%95%E9%9B%86/image-20210517160442321.png" alt></p>
+<h1>1.training dataset（训练集）</h1>
+<p><strong>训练集（Training Dataset）是用来训练模型使用的</strong></p>
+<p><img src="/2019/05/17/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%AE%AD%E7%BB%83%E9%9B%86%E3%80%81%E9%AA%8C%E8%AF%81%E9%9B%86%E3%80%81%E6%B5%8B%E8%AF%95%E9%9B%86/image-20210517160742442.png" alt></p>
+<h1>2.validation dataset（验证集）</h1>
+<p>当我们的模型训练好之后，我们并不知道他的表现如何。这个时候就可以使用验证集来看看模型在新数据（验证集和测试集是不同的数据）上的表现如何。同时通过<strong>调整超参数</strong>，让模型处于最好的状态。</p>
+<p><img src="/2019/05/17/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%AE%AD%E7%BB%83%E9%9B%86%E3%80%81%E9%AA%8C%E8%AF%81%E9%9B%86%E3%80%81%E6%B5%8B%E8%AF%95%E9%9B%86/image-20210517161111936.png" alt></p>
+<p>验证集的主要作用：</p>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p>评估模型效果</p>
+</li>
+<li class="lvl-2">
+<p><strong>调整超参数</strong>，使得模型在验证集上的效果最好</p>
+</li>
+</ul>
+<blockquote>
+<ol>
+<li class="lvl-3">
+<p>验证集不像训练集和测试集，它是非必需的。<strong>如果不需要调整超参数，就可以不使用验证集，直接用测试集来评估效果。</strong></p>
+</li>
+<li class="lvl-3">
+<p>验证集评估出来的效果并非模型的最终效果，主要是用来调整超参数的，<strong>模型最终效果以测试集的评估结果为准。</strong></p>
+</li>
+</ol>
+</blockquote>
+<h1>3.test dataset（测试集）</h1>
+<p><strong>当调好超参数后，通过测试集来做最终的评估。</strong></p>
+<p><img src="/2019/05/17/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%AE%AD%E7%BB%83%E9%9B%86%E3%80%81%E9%AA%8C%E8%AF%81%E9%9B%86%E3%80%81%E6%B5%8B%E8%AF%95%E9%9B%86/image-20210517161422283.png" alt></p>
+<p>通过测试集的评估，我们会得到一些最终的评估指标，例如：准确率、精确率、召回率、<a target="_blank" rel="noopener" href="https://easyai.tech/ai-definition/accuracy-precision-recall-f1-roc-auc/">F1</a>等。</p>
+<p>详情见 <a target="_blank" rel="noopener" href="https://easyai.tech/ai-definition/accuracy-precision-recall-f1-roc-auc/">https://easyai.tech/ai-definition/accuracy-precision-recall-f1-roc-auc/</a></p>
+<h1>4.如何划分数据集</h1>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p>对于小规模样本集（几万量级），常用的分配比例是 60% 训练集、20% 验证集、20% 测试集。</p>
+</li>
+<li class="lvl-2">
+<p>对于大规模样本集（百万级以上），只要验证集和测试集的数量足够即可，例如有 100w 条数据，那么留 1w 验证集，1w 测试集即可。1000w 的数据，同样留 1w 验证集和 1w 测试集。</p>
+</li>
+<li class="lvl-2">
+<p>超参数越少，或者超参数很容易调整，那么可以减少验证集的比例，更多的分配给训练集。</p>
+</li>
+</ul>
+<h1>4.1 三种主流的交叉验证法</h1>
+<p><img src="/2019/05/17/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%AE%AD%E7%BB%83%E9%9B%86%E3%80%81%E9%AA%8C%E8%AF%81%E9%9B%86%E3%80%81%E6%B5%8B%E8%AF%95%E9%9B%86/image-20210517161831875.png" alt></p>
+<hr>
+<h2 id="4-2-留出法（Holdout-cross-validation）">4.2 留出法（Holdout cross validation）</h2>
+<p>按照<strong>固定比例</strong>数据集<strong>静态的划分</strong>为训练集、验证集、测试集</p>
+<p><img src="/2019/05/17/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%AE%AD%E7%BB%83%E9%9B%86%E3%80%81%E9%AA%8C%E8%AF%81%E9%9B%86%E3%80%81%E6%B5%8B%E8%AF%95%E9%9B%86/image-20210517161554069.png" alt></p>
+<hr>
+<h2 id="4-3-留一法（Leave-one-out-cross-validation）">4.3 <strong>留一法（Leave one out cross validation）</strong></h2>
+<p>每次的<strong>测试集都只有一个样本</strong>，要<strong>进行 m 次训练和预测</strong>。 这个方法<strong>用于训练的数据只比整体数据集少了一个样本</strong>，因此最接近原始样本的分布。但是训练复杂度增加了，因为模型的数量与原始数据样本数量相同。 一般在数据缺乏时使用。</p>
+<hr>
+<h2 id="4-4-k-折交叉验证（k-fold-cross-validation）">4.4 <strong>k 折交叉验证（k-fold cross validation）</strong></h2>
+<p>静态的「留出法」对数据的划分方式比较敏感，有可能不同的划分方式得到了不同的模型。「k 折交叉验证」是一种动态验证的方式，这种方式可以降低数据划分带来的影响。具体步骤如下：</p>
+<ol>
+<li class="lvl-3">
+<p>将数据集分为训练集和测试集，将测试集放在一边</p>
+</li>
+<li class="lvl-3">
+<p>将训练集分为 k 份</p>
+</li>
+<li class="lvl-3">
+<p>每次使用 k 份中的 1 份作为验证集，其他全部作为训练集。</p>
+</li>
+<li class="lvl-3">
+<p>通过 k 次训练后，我们得到了 k 个不同的模型。</p>
+</li>
+<li class="lvl-3">
+<p>评估 k 个模型的效果，从中挑选效果最好的超参数</p>
+</li>
+<li class="lvl-3">
+<p>使用最优的超参数，然后将 k 份数据全部作为训练集重新训练模型，得到最终模型。</p>
+</li>
+</ol>
+<blockquote>
+<p><strong>k 一般取 10</strong> 数据量小的时候，k 可以设大一点，这样训练集占整体比例就比较大，不过同时训练的模型个数也增多。 数据量大的时候，k 可以设小一点。</p>
+</blockquote>
+<p><img src="/2019/05/17/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%AE%AD%E7%BB%83%E9%9B%86%E3%80%81%E9%AA%8C%E8%AF%81%E9%9B%86%E3%80%81%E6%B5%8B%E8%AF%95%E9%9B%86/image-20210517162340406.png" alt></p>
+<p>本文主要参考自：<a target="_blank" rel="noopener" href="https://easyai.tech/ai-definition/3dataset-and-cross-validation/">https://easyai.tech/ai-definition/3dataset-and-cross-validation/</a></p>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">小王同学</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://morvan.top/2019/05/17/深度学习之训练集、验证集、测试集/">https://morvan.top/2019/05/17/深度学习之训练集、验证集、测试集/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://morvan.top">小王同学的精神驿站</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2019/05/17/RNN%E6%A8%A1%E5%9E%8B%E4%B8%8ENLP%E5%BA%94%E7%94%A83-SimpleRNN%E6%A8%A1%E5%9E%8B/"><i class="fa fa-chevron-left">  </i><span>RNN模型与NLP应用3-SimpleRNN模型</span></a></div><div class="next-post pull-right"><a href="/2019/05/16/RNN%E6%A8%A1%E5%9E%8B%E4%B8%8ENLP%E5%BA%94%E7%94%A82-%E6%96%87%E6%9C%AC%E5%A4%84%E7%90%86%E4%B8%8E%E8%AF%8D%E5%B5%8C%E5%85%A5/"><span>RNN模型与NLP应用2-文本处理与词嵌入</span><i class="fa fa-chevron-right"></i></a></div></nav><div id="disqus_thread"></div><script>var unused = null;
+var disqus_config = function () {
+  this.page.url = 'https://morvan.top/2019/05/17/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%AE%AD%E7%BB%83%E9%9B%86%E3%80%81%E9%AA%8C%E8%AF%81%E9%9B%86%E3%80%81%E6%B5%8B%E8%AF%95%E9%9B%86/';
+  this.page.identifier = '2019/05/17/深度学习之训练集、验证集、测试集/';
+  this.page.title = '深度学习之训练集、验证集、测试集';
+}
+var d = document, s = d.createElement('script');
+s.src = "https://" + 'cholen' +".disqus.com/embed.js";
+s.setAttribute('data-timestamp', '' + +new Date());
+(d.head || d.body).appendChild(s);</script><script id="dsq-count-scr" src="https://cholen.disqus.com/count.js" async></script></div></div><footer class="footer-bg" style="background-image: url(/img/wallhaven-8ogod1.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2015 - 2023 By 小王同学</div><div class="footer_custom_text">hitokoto</div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.9.0"></script><script src="/js/fancybox.js?version=1.9.0"></script><script src="/js/sidebar.js?version=1.9.0"></script><script src="/js/copy.js?version=1.9.0"></script><script src="/js/fireworks.js?version=1.9.0"></script><script src="/js/transition.js?version=1.9.0"></script><script src="/js/scroll.js?version=1.9.0"></script><script src="/js/head.js?version=1.9.0"></script><script src="/js/search/algolia.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script src="/js/katex.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="algolia-search"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>

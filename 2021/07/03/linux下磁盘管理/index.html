@@ -1,0 +1,436 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="linux下磁盘管理"><meta name="keywords" content="Linux"><meta name="author" content="小王同学"><meta name="copyright" content="小王同学"><title>linux下磁盘管理 | 小王同学的精神驿站</title><link rel="shortcut icon" href="/melody-favicon.ico"><link rel="stylesheet" href="/css/index.css?version=1.9.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.0"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css?version=1.9.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.1.1/dist/instantsearch.min.css"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.1.1/dist/instantsearch.min.js" defer></script><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script src="https://v1.hitokoto.cn/?encode=js&amp;charset=utf-8&amp;select=.footer_custom_text" defer></script><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: {"appId":"LZQCIQZ454","apiKey":"97649af295e704cd4588883b375c23ef","indexName":"mySearch","hits":{"per_page":10},"languages":{"input_placeholder":"搜索文章","hits_empty":"找不到您查询的内容:${query}","hits_stats":"找到 ${hits} 条结果，用时 ${time} 毫秒"}},
+  localSearch: undefined,
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  hexoVersion: '5.4.0'
+} </script><meta name="generator" content="Hexo 5.4.0"></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">0.重点摘要</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">1.磁盘&#x2F;硬盘</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%E7%A3%81%E7%9B%98%E5%91%BD%E5%90%8D"><span class="toc-text">1.1 磁盘命名</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-%E5%88%86%E5%8C%BA%E6%96%B9%E5%BC%8F"><span class="toc-text">1.2 分区方式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-1-MBR-Master-Boot-Record"><span class="toc-text">1.2.1 MBR   Master  Boot Record</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-2-GPT-GUID-Partition-Table"><span class="toc-text">1.2.2 GPT    GUID Partition Table</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-3-%E7%AE%A1%E7%90%86%E7%A3%81%E7%9B%98-%EF%BC%88%E8%AF%B7%E5%9C%A8root%E4%B8%8B%E8%BF%90%E8%A1%8C%EF%BC%89"><span class="toc-text">1.3 管理磁盘 （请在root下运行）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-1-%E6%B7%BB%E5%8A%A0%E7%A3%81%E7%9B%98"><span class="toc-text">1.3.1 添加磁盘</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-2-%E6%9F%A5%E7%9C%8B%E7%A3%81%E7%9B%98%E4%BF%A1%E6%81%AF"><span class="toc-text">1.3.2 查看磁盘信息</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-3-%E5%88%9B%E5%BB%BA%E5%88%86%E5%8C%BA"><span class="toc-text">1.3.3 创建分区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-4-%E5%88%9B%E5%BB%BA%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%EF%BC%88%E6%A0%BC%E5%BC%8F%E5%8C%96%EF%BC%89"><span class="toc-text">1.3.4 创建文件系统（格式化）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-5-%E6%8C%82%E8%BD%BDmount"><span class="toc-text">1.3.5 挂载mount</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-6-%E6%9F%A5%E7%9C%8B%E6%8C%82%E8%BD%BD%E4%BF%A1%E6%81%AF"><span class="toc-text">1.3.6 查看挂载信息</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">2. 交换分区Swap</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#2-1-%E4%BD%9C%E7%94%A8"><span class="toc-text">2.1 作用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-2-%E5%A4%A7%E5%B0%8F"><span class="toc-text">2.2 大小</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-3-%E6%9F%A5%E7%9C%8B%E5%BD%93%E5%89%8D%E7%9A%84%E4%BA%A4%E6%8D%A2%E5%88%86%E5%8C%BA"><span class="toc-text">2.3 查看当前的交换分区</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-4-%E5%A2%9E%E5%8A%A0%E4%BA%A4%E6%8D%A2%E5%88%86%E5%8C%BA"><span class="toc-text">2.4 增加交换分区</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-1-%E5%88%86%E5%8C%BA-fdisk"><span class="toc-text">2.4.1 分区 fdisk</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-2-%E6%A0%BC%E5%BC%8F%E5%8C%96"><span class="toc-text">2.4.2 格式化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-3-%E6%8C%82%E8%BD%BD"><span class="toc-text">2.4.3 挂载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-4-%E6%9F%A5%E7%9C%8B"><span class="toc-text">2.4.4 查看</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">3.逻辑卷管理 LVM (Logical volume Manager)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#3-0-%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BA%A7%E7%94%9FLVM"><span class="toc-text">3.0 为什么产生LVM</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-1-%E7%89%B9%E7%82%B9"><span class="toc-text">3.1 特点</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-2-%E5%8E%9F%E7%90%86%E5%89%96%E6%9E%90"><span class="toc-text">3.2 原理剖析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-3-Linux%E5%91%BD%E4%BB%A4%E5%AE%9E%E6%93%8D"><span class="toc-text">3.3 Linux命令实操</span></a></li><li class="toc-item toc-level-2"><a class="toc-link"><span class="toc-text"></span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-1-%E5%88%9B%E5%BB%BA%E7%89%A9%E7%90%86%E5%8D%B7PV"><span class="toc-text">3.3.1 创建物理卷PV</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-2-%E6%96%B0%E5%BB%BA%E5%8D%B7%E7%BB%84VG"><span class="toc-text">3.3.2 新建卷组VG</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-3-%E6%96%B0%E5%BB%BA%E9%80%BB%E8%BE%91%E5%8D%B7%EF%BC%88LV%EF%BC%89"><span class="toc-text">3.3.3 新建逻辑卷（LV）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-4-%E6%A0%BC%E5%BC%8F%E5%8C%96%E9%80%BB%E8%BE%91%E5%8D%B7%E5%B9%B6%E6%8C%82%E8%BD%BD"><span class="toc-text">3.3.4 格式化逻辑卷并挂载</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-4-LVM%E7%9A%84%E6%89%A9%E5%AE%B9"><span class="toc-text">3.4 LVM的扩容</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-1-%E9%80%BB%E8%BE%91%E5%8D%B7%EF%BC%88LV%EF%BC%89%E7%9A%84%E6%89%A9%E5%AE%B9"><span class="toc-text">3.4.1 逻辑卷（LV）的扩容</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-1-1-ext2-ext3-ext4%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%EF%BC%8C%E8%B0%83%E6%95%B4%E5%91%BD%E4%BB%A4%E6%98%AFresize2fs%EF%BC%8C%E6%88%96%E8%80%85%E7%9B%B4%E6%8E%A5%E7%94%A8%E2%80%9C-r%E2%80%9D%E8%87%AA%E5%8A%A8%E6%89%A9%E5%B1%95%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%A4%A7%E5%B0%8F"><span class="toc-text">3.4.1.1 ext2&#x2F;ext3&#x2F;ext4文件系统，调整命令是resize2fs，或者直接用“-r”自动扩展文件系统大小</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-1-2-xfs%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E7%9A%84%E8%B0%83%E6%95%B4%E5%91%BD%E4%BB%A4%E6%98%AFxfs-growfs%EF%BC%8C%E6%88%96%E8%80%85%E7%9B%B4%E6%8E%A5%E7%94%A8%E2%80%9C-r%E2%80%9D%E8%87%AA%E5%8A%A8%E6%89%A9%E5%B1%95%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E5%A4%A7%E5%B0%8F"><span class="toc-text">3.4.1.2 xfs文件系统的调整命令是xfs_growfs，或者直接用“-r”自动扩展文件系统大小</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-5-VG%E7%9A%84%E6%89%A9%E5%AE%B9"><span class="toc-text">3.5 VG的扩容</span></a></li></ol></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/img/avatar.png"></div><div class="author-info__name text-center">小王同学</div><div class="author-info__description text-center">心中有梦，眼里有光</div><div class="follow-button"><a target="_blank" rel="noopener" href="https://github.com/VanCholen">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">56</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">31</span></a><a class="author-info-articles__categories article-meta" href="/categories"><span class="pull-left">分类</span><span class="pull-right">22</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">友情链接-Links</div><a class="author-info-links__name text-center" target="_blank" rel="noopener" href="https://github.com/VanCholen">GitHub</a><a class="author-info-links__name text-center">WeiBo</a><a class="author-info-links__name text-center">CSDN</a><a class="author-info-links__name text-center">知乎</a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(/img/wallhaven-8ogod1.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">小王同学的精神驿站</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a><a class="site-page" href="/about">About</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="post-info"><div id="post-title">linux下磁盘管理</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2021-07-03</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/Linux/">Linux</a><span class="post-meta__separator">|</span><i class="fa fa-comment-o post-meta__icon" aria-hidden="true"></i><a href="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/#disqus_thread"><span class="disqus-comment-count" data-disqus-identifier="2021/07/03/linux下磁盘管理/"></span></a><div class="post-meta-wordcount"><span>字数总计: </span><span class="word-count">5.2k</span><span class="post-meta__separator">|</span><span>阅读时长: 17 分钟</span></div></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><h1>0.重点摘要</h1>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p>分区</p>
+</li>
+<li class="lvl-2">
+<p>格式化（创建文件系统）</p>
+</li>
+<li class="lvl-2">
+<p>挂载</p>
+</li>
+<li class="lvl-2">
+<p>逻辑卷管理LVM</p>
+</li>
+</ul>
+<span id="more"></span>
+<h1>1.磁盘/硬盘</h1>
+<p><strong>所有的东西都存储在磁盘上，然后加载进入内存。</strong></p>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p>机械硬盘 (传统的普通硬盘)</p>
+</li>
+<li class="lvl-2">
+<p>固态硬盘 (固态驱动器SSD: Solid State Disk或Solid State Drive)</p>
+</li>
+</ul>
+<h2 id="1-1-磁盘命名">1.1 磁盘命名</h2>
+<p><strong>第一块硬盘的全名:    /dev/sda</strong></p>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p>/dev 设备文件目录</p>
+</li>
+<li class="lvl-3">
+<p>sda 是一个文件</p>
+</li>
+<li class="lvl-2">
+<p>s代表sata 就是串口</p>
+</li>
+<li class="lvl-2">
+<p>d代表disk磁盘</p>
+</li>
+<li class="lvl-2">
+<p>a 第一块     b 第二块   … 依次类推</p>
+</li>
+</ul>
+<p>思考：第二十七块磁盘名？</p>
+<p><strong>磁盘阵列（RAID）、把多个硬盘当成一块来使用</strong></p>
+<p><strong>扇区：512字节        后面分区的时候会看到</strong></p>
+<h2 id="1-2-分区方式">1.2 分区方式</h2>
+<h3 id="1-2-1-MBR-Master-Boot-Record">1.2.1 MBR   Master  Boot Record</h3>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p>支持的<strong>最大磁盘容量是&lt;2TB</strong>，设计时分配<strong>4个分区</strong></p>
+</li>
+<li class="lvl-2">
+<p>如果希望超过4个分区，需要放弃一个主分区，改为扩展分区和逻辑分区</p>
+</li>
+</ul>
+<h3 id="1-2-2-GPT-GUID-Partition-Table">1.2.2 GPT    GUID Partition Table</h3>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p>支持大于2T的硬盘，支持128个分区</p>
+</li>
+</ul>
+<h2 id="1-3-管理磁盘-（请在root下运行）">1.3 管理磁盘 （请在root下运行）</h2>
+<p><strong>分区、格式化(创建文件系统)、挂载</strong></p>
+<p><strong>分区、格式化(创建文件系统)、挂载</strong></p>
+<p><strong>分区、格式化(创建文件系统)、挂载</strong></p>
+<p>重要的事情说三遍！</p>
+<h3 id="1-3-1-添加磁盘">1.3.1 添加磁盘</h3>
+<p>虚拟机实验</p>
+<h3 id="1-3-2-查看磁盘信息">1.3.2 查看磁盘信息</h3>
+<p>看看你的电脑上有几块磁盘，每块磁盘的分区信息。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ll /dev/sd*</span><br></pre></td></tr></table></figure>
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210704114103516.png" alt></p>
+<hr>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lsblk</span><br></pre></td></tr></table></figure>
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210704114254390.png" alt></p>
+<hr>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df -hT</span><br></pre></td></tr></table></figure>
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210704173741347.png" alt></p>
+<h3 id="1-3-3-创建分区">1.3.3 创建分区</h3>
+<p>假设我现在对<strong>第二块硬盘</strong>进行分区</p>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p>启动分区工具</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fdisk &#x2F;dev&#x2F;sdb</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p color="red;font-weight:bold">注意！是对磁盘进行分区，是/dev/sdb</p>
+</blockquote>
+</li>
+<li class="lvl-2">
+<p>进入会话模式</p>
+<blockquote>
+<ul class="lvl-3">
+<li class="lvl-2">
+<p>操作：敲击字母&quot;n&quot;键</p>
+</li>
+<li class="lvl-2">
+<p>说明：欢迎界面，输入帮助指令或操作指令</p>
+</li>
+<li class="lvl-2">
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210704174427820.png" alt></p>
+</li>
+</ul>
+</blockquote>
+<hr>
+<blockquote>
+<ul class="lvl-3">
+<li class="lvl-2">
+<p>操作：敲击字母”p“键</p>
+</li>
+<li class="lvl-2">
+<p>说明：创建主分区</p>
+</li>
+<li class="lvl-2">
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210704174840448.png" alt></p>
+</li>
+</ul>
+</blockquote>
+<hr>
+<blockquote>
+<ul class="lvl-3">
+<li class="lvl-2">
+<p>操作：敲击字母”1“键</p>
+</li>
+<li class="lvl-2">
+<p>说明：选择分区号</p>
+</li>
+<li class="lvl-2">
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210704175011222.png" alt></p>
+</li>
+</ul>
+</blockquote>
+<hr>
+<blockquote>
+<ul class="lvl-3">
+<li class="lvl-2">
+<p>操作：敲击回车键</p>
+</li>
+<li class="lvl-2">
+<p>说明：选择磁盘开始的扇区</p>
+</li>
+<li class="lvl-2">
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210704175201006.png" alt></p>
+</li>
+</ul>
+</blockquote>
+<hr>
+<blockquote>
+<ul class="lvl-3">
+<li class="lvl-2">
+<p>操作： 输入分区大小 ”+2G“ 后回车   根据自己的实际情况决定分区大小</p>
+</li>
+<li class="lvl-2">
+<p>说明：选择磁盘分区结束的扇区，即分区大小</p>
+</li>
+<li class="lvl-2">
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210704175439406.png" alt></p>
+</li>
+</ul>
+</blockquote>
+<hr>
+<blockquote>
+<ul class="lvl-3">
+<li class="lvl-2">
+<p>说明： 已经完成2G大小分区记录，但未生效</p>
+</li>
+</ul>
+</blockquote>
+<hr>
+<blockquote>
+<ul class="lvl-3">
+<li class="lvl-2">
+<p>操作：输入w保存分区信息</p>
+</li>
+<li class="lvl-2">
+<p>自动退出分区工具</p>
+</li>
+<li class="lvl-2">
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210704175713736.png" alt></p>
+</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+<hr>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p>刷新分区表</p>
+<p>刷新<strong>第二块磁盘</strong>的分区表</p>
+</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">partprobe /dev/sdb</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p color="red;font-weight:bold"> 注意！刷新的是磁盘的分区表，是磁盘/dev/sdb, 而不是分区/dev/sdb1</p>
+</blockquote>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p>查看分区结果</p>
+</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lsblk</span><br></pre></td></tr></table></figure>
+<h3 id="1-3-4-创建文件系统（格式化）">1.3.4 创建文件系统（格式化）</h3>
+<p>为<strong>分区</strong>创建文件系统</p>
+ <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkfs.ext4 /dev/sdb1</span><br><span class="line"><span class="meta">#</span><span class="bash"> 或者使用下面的命令</span></span><br><span class="line">mkfs -t ext4 /dev/sdb1</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p color="red;font-weight:bold">注意是分区/dev/sdb1, 而不是磁
+ 盘/dev/sdb</p>
+</blockquote>
+<h3 id="1-3-5-挂载mount">1.3.5 挂载mount</h3>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p>手动挂载</p>
+<ul class="lvl-2">
+<li class="lvl-4">创建挂载点(目录)，一个分区一个挂载点</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir /mnt/disk1</span><br><span class="line">mount -t ext4 /dev/sdb1 /mnt/disk1</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>挂载点 就好像是一个指针，它可以通过挂载操作”指向“不同的磁盘或者是磁盘中的分区，从而实现针对同一个文件夹，往不同的磁盘中写入。</p>
+</blockquote>
+<h3 id="1-3-6-查看挂载信息">1.3.6 查看挂载信息</h3>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">df -hT</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mount </span><br></pre></td></tr></table></figure>
+<p>Linux 下的文件系统是统一的，都是从/开始，向下你爱分几级目录就分几级目录，但是<strong>实际的存储内容在真实的硬盘上</strong>，通过挂载这一操作联系起来。</p>
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210704183343113.png" alt></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mount -t ext4 /dev/sda1 /mnt/disk1</span><br></pre></td></tr></table></figure>
+<p>倘若现在你通过挂载操作将/dev/sda1挂载到/mnt/disk1目录下，那么现在你往/mnt/disk1目录下放东西，都会放到/dev/sda这块磁盘的/dev/sda1分区上。</p>
+<p>接下来，你又执行了如下命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">unmount -v /dev/sda1</span><br><span class="line">mount -t ext4 /dev/sdb1 /mnt/disk1</span><br></pre></td></tr></table></figure>
+<p>情况会变为</p>
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210704183746223.png" alt></p>
+<p>接下来，<strong>你之前存放在/mnt/disk1下的东西会变得”不可见“(实际上它们还在磁盘/dev/sda上的分区/dev/sda1上)，你现在看到的/mnt/disk1下的东西应该是/dev/sdb1下的内容;</strong></p>
+<p><strong>现在你往/mnt/disk1下放的东西，统统都会存放到/dev/sdb这块磁盘的/dev/sdb1分区上。</strong></p>
+<h1>2. 交换分区Swap</h1>
+<h2 id="2-1-作用">2.1 作用</h2>
+<p>类似Winodws下的虚拟内存，提升内存容量，防止OOP(out of memory)。</p>
+<h2 id="2-2-大小">2.2 大小</h2>
+<p>推荐： 实际内存大小的2倍</p>
+<h2 id="2-3-查看当前的交换分区">2.3 查看当前的交换分区</h2>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">free -m </span><br></pre></td></tr></table></figure>
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210704194201613.png" alt></p>
+<h2 id="2-4-增加交换分区">2.4 增加交换分区</h2>
+<h3 id="2-4-1-分区-fdisk">2.4.1 分区 fdisk</h3>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p>划分分区后，按t键，将类型设置为82</p>
+</li>
+<li class="lvl-2">
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210704194631087.png" alt></p>
+</li>
+</ul>
+<h3 id="2-4-2-格式化">2.4.2 格式化</h3>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkswap /dev/sde1</span><br></pre></td></tr></table></figure>
+<h3 id="2-4-3-挂载">2.4.3 挂载</h3>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">swapon /dev/sde1</span><br></pre></td></tr></table></figure>
+<p>卸载</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">swapoff &#x2F;dev&#x2F;sde1</span><br></pre></td></tr></table></figure>
+<h3 id="2-4-4-查看">2.4.4 查看</h3>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">free -m</span><br></pre></td></tr></table></figure>
+<h1>3.逻辑卷管理 LVM (Logical volume Manager)</h1>
+<h2 id="3-0-为什么产生LVM">3.0 为什么产生LVM</h2>
+<p>其实在Linux操作系统中，我们的磁盘管理机制和windows上的差不多，绝大多数都是使用MBR(Master Boot Recorder)都是通过先对一个硬盘进行分区，然后再将该分区进行文件系统的格式化，在Linux系统中如果要使用该分区就将其挂载上去即可，windows的话其实底层也就是自动将所有的分区挂载好，然后我们就可以对该分区进行使用了。</p>
+<p>但是这种<strong>传统的磁盘管理经常会带来很多的问题</strong>，比如说当我们使用的一个分区，其空间大小已经不再够用了，这个时候我们没有办法通过拉伸分区来进行分区扩充，当然目前也有其他第三方的磁盘管理软件可以进行磁盘的分区空间划分，但是这样会给我们的文件系统造成很大的伤害，有时会导致文件系统崩溃等问题。对于传统的磁盘管理如果说我们碰到当分区大小不足的时候，我们只能通过增加新的硬盘，然后在新的硬盘上创建分区，对分区进行格式化以后，然后将之前分区的所有东西都拷贝到新的分区里面才行。但是新增加的硬盘是作为独立的文件系统存在的，原有的文件系统并没有得到任何的扩充，上层应用只能访问到一个文件系统。这样的方式对个人的电脑来说可能还能接受，但是如果<strong>对于生产环境下的服务器来说，这是不可接受的</strong>。因为如果要把一个分区的内容都拷贝到另一个分区上去，势必要首先卸载掉之前的那个分区，然后对整个分区进行拷贝，如果服务器上运行着一个重要的服务，比如说WWW或者FTP，其要求是 7*24 小时运行正常的，那么卸载掉分区这是不可想象的，同时如果该分区保存的内容非常非常的多，那么在对分区进行转移时时间可能会耗费很久，所以，这个时候我们就会受到传统磁盘管理的限制，因为其不能够进行动态的磁盘管理。因此，为了解决这个问题，LVM技术就诞生了！！！</p>
+<p>LVM是Linux系统中对磁盘分区进行管理的一种逻辑机制，它是<strong>建立在硬盘和分区之上，文件系统之下的一个逻辑层</strong>，建立文件系统是屏蔽了下层的磁盘分区布局，能够在保持现有数据不变的情况下动态调整磁盘容量，从而提高磁盘管理的灵活性。需要注意的是：<strong>/boot分区用于存放引导文件，不能基于LVM创建</strong>。</p>
+<h2 id="3-1-特点">3.1 特点</h2>
+<p><strong>随意扩张大小</strong>，缩减大小，快照备份</p>
+<p><strong>随意扩张大小</strong></p>
+<p><strong>随意扩张大小</strong></p>
+<h2 id="3-2-原理剖析">3.2 原理剖析</h2>
+<p>LVM(Logical volume Manager)是逻辑卷管理的简称。它是Linux环境下对磁盘分区进行管理的一种机制。现在不仅仅是Linux系统上可以使用LVM这种磁盘管理机制，对于其它的类UNIX操作系统，以及windows操作系统都有类似与LVM这种磁盘管理软件。</p>
+<p>LVM的工作原理其实很简单，它就是通过<strong>将底层的物理硬盘抽象的封装起来，然后以逻辑卷的方式呈现给上层应用</strong>。在<strong>传统的磁盘管理机制中，我们的上层应用是直接访问文件系统，从而对底层的物理硬盘进行读取</strong>，而在LVM中，其通过对底层的硬盘进行封装，当我们对底层的物理硬盘进行操作时，其不再是针对于分区进行操作，而是通过一个叫做<strong>逻辑卷</strong>的东西来对其进行底层的磁盘管理操作。比如说我增加一个物理硬盘，这个时候上层的服务是感觉不到的，因为呈现给上次服务的是以逻辑卷的方式。</p>
+<p>LVM最大的特点就是可以对磁盘进行动态管理。因为逻辑卷的大小是可以动态调整的，而且不会丢失现有的数据。我们如果新增加了硬盘，其也不会改变现有上层的逻辑卷。作为一个动态磁盘管理机制，逻辑卷技术大大提高了磁盘管理的灵活性！！！</p>
+<ul class="lvl-0">
+<li class="lvl-2">
+<p><strong>PE</strong> (Physical Extend) 物理拓展</p>
+</li>
+<li class="lvl-2">
+<p><strong>PV</strong> (Physical Volume) 物理卷</p>
+</li>
+<li class="lvl-2">
+<p><strong>VG</strong> (Volume Group) 卷组</p>
+</li>
+<li class="lvl-2">
+<p><strong>LV</strong> (Logical Volume) 逻辑卷</p>
+</li>
+</ul>
+<p>我们知道在使用LVM对磁盘进行动态管理以后，我们是以逻辑卷的方式呈现给上层的服务的。所以<strong>我们所有的操作目的，其实就是去创建一个LV(Logical Volume)逻辑卷 用来取代我们之前的分区，我们通过对逻辑卷进行格式化，然后进行挂载操作就可以使用了</strong>。</p>
+<p><strong>去创建一个LV(Logical Volume)逻辑卷用来取代我们之前的分区！！！</strong></p>
+<p><strong>去创建一个LV(Logical Volume)逻辑卷用来取代我们之前的分区！！！</strong></p>
+<p><strong>去创建一个LV(Logical Volume)逻辑卷用来取代我们之前的分区！！！</strong></p>
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210704235129859.png" alt></p>
+<p><strong>1.将我们的物理硬盘格式化成PV(Physical Volume)</strong></p>
+<p>我们看到，这里有两块硬盘，一块是sda，另一块是sdb，在LVM磁盘管理里，我首先要将这两块硬盘格式化为我们的<strong>PV</strong>(Physical Volume),也就是我们的物理卷，其实格式化物理卷的过程中LVM是将底层的硬盘划分为了一个一个的<strong>PE</strong>(Physical Extend),<strong>我们的LVM磁盘管理中PE的默认大小是4M大小</strong>，可以自己调节，其实PE就是我们逻辑卷管理的最基本单位。比如说我有一个400M的硬盘，那么在将其格式化成PV的时候，其实际就是将这块物理硬盘划分成了100个的PE，因为PE默认的大小就是4M。这个就是我们的第一步操作。</p>
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210705083609171.png" alt></p>
+<p><strong>2.创建一个VG(Volume Group)</strong></p>
+<p>在将硬盘格式化成PV以后，我们第二步操作就是创建一个卷组，也就是<strong>VG</strong>(Volume Group),卷组在这里我们可以将其抽象化成一个空间池，VG的作用就是用来装PE的，我们可以把一个或者多个PV加到VG当中，因为在第一步操作时就已经将该硬盘划分成了多个PE，所以将多个PV加到VG里面后，VG里面就存放了许许多多来自不同PV中的PE，我们通过上面的图片就可以看到，我们格式化了两块硬盘，每个硬盘分别格式化成了3个PE，然后将两块硬盘的PE都加到了我们的VG当中，那么我们的VG当中就包含了6个PE，这6个PE就是两个硬盘的PE之和。通常创建一个卷组的时候我们会为其取一个名字，也就是该VG的名字。</p>
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210705083816063.png" alt></p>
+<p><strong>3.基于VG创建我们最后要使用的LV(Logical Volume)</strong></p>
+<p>【<strong>注意</strong>】PV以及VG创建好以后我们是不能够直接使用的，因为PV、VG是我们逻辑卷底层的东西，我们其实最后使用的是在VG基础上创建的<strong>LV</strong>(Logical Volume),所以第三步操作就是基于VG来创建我们最终要使用的LV。</p>
+<p>当我们创建好我们的VG以后，这个时候我们创建LV其实就是从VG中拿出我们指定数量的PE，还是拿上图来说，我们看到我们此时的VG里面已经拥有了6个PE，这时候我们创建了我们的第一个逻辑卷，它的大小是4个PE的大小，也就是16M(因为一个PE的默认大小是4M)，而这4个PE有三个是来自于第一块硬盘，而另外一个PE则是来自第二块硬盘。当我们创建第二个逻辑卷时，它的大小就最多只有两个PE的大小了，因为其中的4个PE已经分配给了我们的第一个逻辑卷。</p>
+<p>所以创建逻辑卷其实就是我们从VG中拿出我们指定数量的PE，VG中的PE可以来自不同的PV，我们可以创建的逻辑卷的大小取决于VG当中PE存在的数量，并且我们创建的逻辑卷其大小一定是PE的整数倍(即逻辑卷的大小一定要是4M的整数倍)。</p>
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/Snipaste_2021-07-05_08-42-56.png" alt></p>
+<p><strong>4.将我们创建好的LV进行文件系统的格式化，然后挂载使用</strong></p>
+<p>在创建好LV以后，这个时候我们就能够对其进行文件系统的格式化了，我们最终使用的就是我们刚创建好的LV，其就相当于传统的文件管理的分区，我们首先要对其进行文件系统的格式化操作，然后通过mount命令对其进行挂载，这个时候我们就能够像使用平常的分区一样来使用我们的逻辑卷了。</p>
+<p>我们在创建好LV以后，我们会在 /dev 目录下看到我们的LV信息，例如 /dev/vgname/lvname， 我们<strong>每创建一个VG，其会在/dev目录下创建一个以该VG名字命名的文件夹，在该VG的基础上创建好LV以后，我们会在这个VG目录下多出一个以LV名字命名的逻辑卷</strong>。</p>
+<p>LVM的工作原理进行一个总结：</p>
+<p>(1)<strong>物理磁盘被格式化为PV，空间被划分为一个个的PE</strong></p>
+<p>(2)<strong>不同的PV加入到同一个VG中，不同PV的PE全部进入到了VG的PE池内</strong></p>
+<p>(3)<strong>LV基于PE创建，大小为PE的整数倍，组成LV的PE可能来自不同的物理磁盘</strong></p>
+<p>(4)<strong>LV现在就直接可以格式化后挂载使用了</strong></p>
+<p>(5)<strong>LV的扩充缩减实际上就是增加或减少组成该LV的PE数量，其过程不会丢失原始数据</strong></p>
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210704235427917.png" alt></p>
+<p>我们看到，我们这里如果要对LV进行扩充，直接加进来一块sdc硬盘，然后将其格式化成PE，然后将该PV加入到了VG当中，这个时候我们就可以通过增加LV中PE的数量来动态的对LV进行扩充了，只要我们的LV的大小不要超过我们VG空余空间的大小就行了！！</p>
+<h2 id="3-3-Linux命令实操">3.3 Linux命令实操</h2>
+<p>主要命令列表</p>
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/135426-20160410215523687-1102171838.png" alt></p>
+<h2 id></h2>
+<h3 id="3-3-1-创建物理卷PV">3.3.1 创建物理卷PV</h3>
+<p>1.给虚拟机添加两块硬盘，然后重启Linux系统（重启系统才能识别到硬盘，用“reboot”或“init6”命令重启）。</p>
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210705090945997.png" alt></p>
+<p>2.使用 如下命令查看磁盘信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fdisk -l</span><br></pre></td></tr></table></figure>
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210705091751525.png" alt></p>
+<ol start="3">
+<li class="lvl-3">
+<p>对磁盘/dev/sdb进行配置，将所有空间全部分配到一个主分区，然后转换分区格式为LVM格式。</p>
+<p><strong>注意更改类型为8e</strong></p>
+</li>
+</ol>
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210705092132144.png" alt></p>
+<p>4.用上面的方法，对磁盘/dev/sdc进行于磁盘/dev/sdb相同的配置，并保存退出磁盘配置面板。（因为过程相同我就不多赘述了）</p>
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210705092447992.png" alt></p>
+<p>5.再次用fdisk -l命令，检查磁盘分区是否配置成功。</p>
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210705092709584.png" alt></p>
+<p>6.用pvcreate命令将两个磁盘分区创建为两个物理卷。（我用的是正则表达式输入，更简便，跟输入“pvcreate /dev/sdb1 /dev/sdc1 ”命令行结果是相同的）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pvcreate /dev/sd&#123;b..c&#125;1</span><br></pre></td></tr></table></figure>
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210705094040796.png" alt></p>
+<h3 id="3-3-2-新建卷组VG">3.3.2 新建卷组VG</h3>
+<p>1.将物理卷sdb1、sdc1加入到卷组mailbox内。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vgcreate mailbox /dev/sd&#123;b..c&#125;1---------新建卷组mailbox并将物理卷sdb1、sdc1、sdd1添加进去</span><br><span class="line">pvscan-------------------------------------------查看物理卷信息</span><br></pre></td></tr></table></figure>
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210705094457679.png" alt></p>
+<p>2.查看一下卷组mailbox的详细信息。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vgdisplay----------显示卷组详细信息</span><br></pre></td></tr></table></figure>
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210705094617248.png" alt="image-20210705094617248"></p>
+<h3 id="3-3-3-新建逻辑卷（LV）">3.3.3 新建逻辑卷（LV）</h3>
+<p>1.给mailbox卷组新建一个逻辑卷mbox01。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lvcreate -L 300M -n mbox01 mailbox-------给mailbox卷组新建一个名为mbox01的逻辑卷，容量为300M</span><br><span class="line">lvdisplay-----------------------------------------------显示逻辑卷详细信息</span><br></pre></td></tr></table></figure>
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210705095210113.png" alt></p>
+<p>2.再给mailbox卷组创建一个逻辑卷mbox02，容量设置为600M。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lvcreate -L 600M -n mbox02 mailbox</span><br><span class="line">lvdisplay</span><br></pre></td></tr></table></figure>
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210705095455030.png" alt></p>
+<p>3.如果感觉逻辑卷mbox01的空间给少了，我们可以给它扩展一个300M的空间。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">lvextend -L +300M /dev/mailbox/mbox01--------给mbox01扩展300M空间，“+”表示增加多少容量，如果不带“+”表示扩容到多少容量。</span><br><span class="line"></span><br><span class="line">lvdisplay</span><br></pre></td></tr></table></figure>
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210705095827908.png" alt></p>
+<h3 id="3-3-4-格式化逻辑卷并挂载">3.3.4 格式化逻辑卷并挂载</h3>
+<p>1.格式化逻辑卷mbox01和mbox02。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkfs.xfs /dev/mailbox/mbox01----------将逻辑卷mbox01格式化为xfs文件格式</span><br><span class="line">mkfs.xfs /dev/mailbox/mbox02----------将逻辑卷mbox02格式化为xfs文件格式</span><br></pre></td></tr></table></figure>
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210705100159388.png" alt></p>
+<p>2.在/mnt/目录下新建两个目录作为两个逻辑卷的挂载点。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir /mnt/mbox0&#123;1..2&#125;----------在/mnt/目录下新建两个名为mbox01、mbox02的目录</span><br><span class="line">ls /mnt/--------------------------------查看/mnt/目录下的文件或目录</span><br></pre></td></tr></table></figure>
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210705100421901.png" alt></p>
+<p>3.在**/etc/fstab**文件里添加逻辑卷mbox01、mbox02的自动挂载命令。(可以自行选择，谨慎操作！否则会导致你的系统启动不起来)</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/fstab-----------------------------------------用vim编辑器对fstab文件进行编辑</span><br><span class="line">输入：/dev/mailbox/mbox01     /mnt/mbox01     xfs     defaults     0 0--添加自动挂载命令</span><br><span class="line">输入：/dev/mailbox/mbox02     /mnt/mbox02     xfs     defaults     0 0--添加自动挂载命令</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">mount -a----------------------------------------------------------挂载所有设备</span><br><span class="line">df -hT------------------------------------------------------------查看挂载信息</span><br></pre></td></tr></table></figure>
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210705101147911.png" alt></p>
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210705101314821.png" alt></p>
+<h2 id="3-4-LVM的扩容">3.4 LVM的扩容</h2>
+<h3 id="3-4-1-逻辑卷（LV）的扩容">3.4.1 逻辑卷（LV）的扩容</h3>
+<h4 id="3-4-1-1-ext2-ext3-ext4文件系统，调整命令是resize2fs，或者直接用“-r”自动扩展文件系统大小">3.4.1.1 ext2/ext3/ext4文件系统，调整命令是resize2fs，或者直接用“-r”自动扩展文件系统大小</h4>
+<p>1.将mbox01逻辑卷解挂载，然后将文件格式，格式化为ext4格式</p>
+<blockquote>
+<p>【注意】</p>
+<p>【注意】</p>
+<p>【注意】</p>
+<p><strong>请去/etc/fstab 中同时改掉/dev/mailbox/mbox01 的文件类型为ext4，否则重启机器会出错，不信你试试。“试试就逝世”</strong></p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">umount /dev/mailbox/mbox01-------------解挂载mbox01</span><br><span class="line">mkfs.ext4 /dev/mailbox/mbox01----------格式化文件格式为ext4</span><br></pre></td></tr></table></figure>
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210705101857442.png" alt></p>
+<p>2.将mbox01重新挂载，然后查看挂载详细信息。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mount /dev/mailbox/mbox01 /mnt/mbox01----------挂载mbox01</span><br><span class="line">df -hT-----------------------------------------查看挂载详情</span><br></pre></td></tr></table></figure>
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210705102123596.png" alt></p>
+<p>3.我们给mbox01添加200M容量，然后查看挂载详情，发现容量并没有增加,这是因为文件系统还没有同步，使用后面一步的resize2fs命令同步文件系统。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lvextend -L +200M /dev/mailbox/mbox01---------------增加容量</span><br><span class="line">df -hT----------------------------------------------查看挂载详情</span><br></pre></td></tr></table></figure>
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210705102520532.png" alt></p>
+<p>4.用resize2fs命令执行容量调整，然后查看发现增加容量成功。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">resize2fs /dev/mailbox/mbox01-------------------------执行调整</span><br><span class="line">df -hT------------------------------------------------查看挂载详情</span><br></pre></td></tr></table></figure>
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210705102759149.png" alt></p>
+<p>5.使用“-r”选项直接自动扩展文件系统大小。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lvextend -L +100M /dev/mailbox/mbox01 -r-------------增加mbox01容量100M并自动扩展</span><br><span class="line">df -hT-----------------------------------------------查看挂载详情</span><br></pre></td></tr></table></figure>
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210705103159081.png" alt></p>
+<h4 id="3-4-1-2-xfs文件系统的调整命令是xfs-growfs，或者直接用“-r”自动扩展文件系统大小">3.4.1.2 xfs文件系统的调整命令是xfs_growfs，或者直接用“-r”自动扩展文件系统大小</h4>
+<p>1.如果在使用mbox02的过程中，容量不够了，我们可以直接进行扩容，但<strong>前提是卷组中有足够的容量支持</strong>。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lvextend -L +200M /dev/mailbox/mbox02----------给mbox02逻辑卷增加200M容量</span><br><span class="line">lvdisplay /dev/mailbox/mbox02----------------显示mbox02逻辑卷详细信息</span><br></pre></td></tr></table></figure>
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210705103753667.png" alt></p>
+<p>2.我们再用df -hT命令查看一下挂载信息，发现mbox02的容量并没有增加。这是因为文件系统还没有同步，我们只需用xfs_growfs命令同步一下即可。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">df -hT-------------------------------------------------查看挂载详情</span><br><span class="line">xfs_growfs /dev/mailbox/mbox02-----------执行调整</span><br><span class="line">df -hT-------------------------------------------------查看挂载详情</span><br></pre></td></tr></table></figure>
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210705104014231.png" alt></p>
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210705104113859.png" alt></p>
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210705104203962.png" alt></p>
+<p>3.用“-r”直接自动扩展文件系统大小。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lvextend -L +100M /dev/mailbox/mbox02 -r-------------增加mbox02容量100M并自动扩展</span><br><span class="line">df -hT---------------------------------------------查看挂载详情</span><br></pre></td></tr></table></figure>
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210705104714487.png" alt></p>
+<h2 id="3-5-VG的扩容">3.5 VG的扩容</h2>
+<p>1.如果我们发现卷组的剩余空间不足，首先我们添加一块硬盘。</p>
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210705105101689.png" alt></p>
+<p>2.添加完硬盘后一般是重启系统，但企业中服务器是不能随意重启的，这里我们用echo “- - -” &gt; /sys/class/scsi_host/host0/scan命令重新扫描scsi总线来添加磁盘。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;- - -&quot; &gt; /sys/class/scsi_host/host0/scan----------扫描scsi总线添加硬盘</span><br><span class="line">fdisk -l /dev/sdd---------------------------------------查看新增的磁盘sdd</span><br></pre></td></tr></table></figure>
+<p>3.将新增磁盘格式化，然后添加到卷组mailbox中去，查看空间添加成功。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pvcreate /dev/sdd-----------------------创建一个新的物理卷/dev/sde</span><br><span class="line">vgextend mailbox /dev/sde---------------将磁盘/dev/sde添加到卷组mailbox中去</span><br><span class="line">vgs-------------------------------------查看卷组信息</span><br></pre></td></tr></table></figure>
+<p><img src="/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/image-20210705111425523.png" alt></p>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">小王同学</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://morvan.top/2021/07/03/linux下磁盘管理/">https://morvan.top/2021/07/03/linux下磁盘管理/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://morvan.top">小王同学的精神驿站</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Linux/">Linux</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2021/07/23/%E4%BA%B2%E7%88%B1%E7%9A%84%E5%85%9A-%E7%94%9F%E6%97%A5%E5%BF%AB%E4%B9%90/"><i class="fa fa-chevron-left">  </i><span>亲爱的党-生日快乐</span></a></div><div class="next-post pull-right"><a href="/2021/06/01/C%E7%9B%98%E7%88%86%E6%BB%A1%E2%80%94%E2%80%94%E4%BF%AE%E6%94%B9QQ%E3%80%81%E5%BE%AE%E4%BF%A1%E7%9A%84%E6%96%87%E4%BB%B6%E5%AD%98%E5%82%A8%E4%BD%8D%E7%BD%AE/"><span>C盘爆满——修改QQ、微信的文件存储位置</span><i class="fa fa-chevron-right"></i></a></div></nav><div id="disqus_thread"></div><script>var unused = null;
+var disqus_config = function () {
+  this.page.url = 'https://morvan.top/2021/07/03/linux%E4%B8%8B%E7%A3%81%E7%9B%98%E7%AE%A1%E7%90%86/';
+  this.page.identifier = '2021/07/03/linux下磁盘管理/';
+  this.page.title = 'linux下磁盘管理';
+}
+var d = document, s = d.createElement('script');
+s.src = "https://" + 'cholen' +".disqus.com/embed.js";
+s.setAttribute('data-timestamp', '' + +new Date());
+(d.head || d.body).appendChild(s);</script><script id="dsq-count-scr" src="https://cholen.disqus.com/count.js" async></script></div></div><footer class="footer-bg" style="background-image: url(/img/wallhaven-8ogod1.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2015 - 2023 By 小王同学</div><div class="footer_custom_text">hitokoto</div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.9.0"></script><script src="/js/fancybox.js?version=1.9.0"></script><script src="/js/sidebar.js?version=1.9.0"></script><script src="/js/copy.js?version=1.9.0"></script><script src="/js/fireworks.js?version=1.9.0"></script><script src="/js/transition.js?version=1.9.0"></script><script src="/js/scroll.js?version=1.9.0"></script><script src="/js/head.js?version=1.9.0"></script><script src="/js/search/algolia.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script src="/js/katex.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="algolia-search"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>

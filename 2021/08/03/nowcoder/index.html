@@ -1,0 +1,131 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="牛客网刷题记录"><meta name="keywords" content="newcoder"><meta name="author" content="小王同学"><meta name="copyright" content="小王同学"><title>牛客网刷题记录 | 小王同学的精神驿站</title><link rel="shortcut icon" href="/melody-favicon.ico"><link rel="stylesheet" href="/css/index.css?version=1.9.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.0"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css?version=1.9.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/instantsearch.js@2.1.1/dist/instantsearch.min.css"><script src="https://cdn.jsdelivr.net/npm/instantsearch.js@2.1.1/dist/instantsearch.min.js" defer></script><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script src="https://v1.hitokoto.cn/?encode=js&amp;charset=utf-8&amp;select=.footer_custom_text" defer></script><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: {"appId":"LZQCIQZ454","apiKey":"97649af295e704cd4588883b375c23ef","indexName":"mySearch","hits":{"per_page":10},"languages":{"input_placeholder":"搜索文章","hits_empty":"找不到您查询的内容:${query}","hits_stats":"找到 ${hits} 条结果，用时 ${time} 毫秒"}},
+  localSearch: undefined,
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  hexoVersion: '5.4.0'
+} </script><meta name="generator" content="Hexo 5.4.0"></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar">     </div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">0.牛客网刷题记录</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-text">1.BM1反转链表</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-1-%E8%A7%A3%E7%AD%94-2"><span class="toc-text">1.1 解答</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-1-C-2"><span class="toc-text">1.1.1 C++</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-2-%E6%8B%93%E5%B1%95%E2%80%94%E2%80%94%E5%8D%95%E9%93%BE%E8%A1%A8%E5%8F%8D%E8%BD%AC"><span class="toc-text">1.2 拓展——单链表反转</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-1-%E8%BF%AD%E4%BB%A3%E5%8F%8D%E8%BD%AC"><span class="toc-text">1.2.1 迭代反转</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-2-%E5%A4%B4%E6%8F%92%E6%B3%95%E5%8F%8D%E8%BD%AC"><span class="toc-text">1.2.2 头插法反转</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-3-%E5%B0%B1%E5%9C%B0%E9%80%86%E7%BD%AE%E5%8F%8D%E8%BD%AC"><span class="toc-text">1.2.3 就地逆置反转</span></a></li></ol></li></ol></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/img/avatar.png"></div><div class="author-info__name text-center">小王同学</div><div class="author-info__description text-center">心中有梦，眼里有光</div><div class="follow-button"><a target="_blank" rel="noopener" href="https://github.com/VanCholen">Follow Me</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">56</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">31</span></a><a class="author-info-articles__categories article-meta" href="/categories"><span class="pull-left">分类</span><span class="pull-right">22</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">友情链接-Links</div><a class="author-info-links__name text-center" target="_blank" rel="noopener" href="https://github.com/VanCholen">GitHub</a><a class="author-info-links__name text-center">WeiBo</a><a class="author-info-links__name text-center">CSDN</a><a class="author-info-links__name text-center">知乎</a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(/img/wallhaven-8ogod1.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">小王同学的精神驿站</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a><a class="site-page" href="/about">About</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="post-info"><div id="post-title">牛客网刷题记录</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2021-08-03</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/newcoder/">newcoder</a><span class="post-meta__separator">|</span><i class="fa fa-comment-o post-meta__icon" aria-hidden="true"></i><a href="/2021/08/03/nowcoder/#disqus_thread"><span class="disqus-comment-count" data-disqus-identifier="2021/08/03/nowcoder/"></span></a><div class="post-meta-wordcount"><span>字数总计: </span><span class="word-count">1.5k</span><span class="post-meta__separator">|</span><span>阅读时长: 5 分钟</span></div></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><h1>0.牛客网刷题记录</h1>
+<span id="more"></span>
+<h1>1.<a target="_blank" rel="noopener" href="https://www.nowcoder.com/practice/75e878df47f24fdc9dc3e400ec6058ca?tpId=295&amp;tqId=23286&amp;ru=/exam/oj&amp;qru=/ta/format-top101/question-ranking&amp;sourceUrl=%2Fexam%2Foj">BM1反转链表</a></h1>
+<h2 id="1-1-解答-2">1.1 解答</h2>
+<p>本题是<strong>不带头节点</strong>的链表反转。</p>
+<p>三个节点，当前节点cur、当前节点前驱pre、用于保存‘当前’节点的临时temp。</p>
+<p>循环条件：<code>cur!=nullptr</code>循环中：<code>更新cur、pre、temp的顺序很重要</code>！循环结束后：<code>pre</code>就是头节点</p>
+<ol>
+<li class="lvl-3">
+<p>保存当前节点<code>cur</code>到<code>temp</code>，<strong>temp=cur</strong></p>
+</li>
+<li class="lvl-3">
+<p>更新<code>当前节点cur</code>，<strong>cur=cur-&gt;next</strong></p>
+</li>
+<li class="lvl-3">
+<p>更新<code>当前</code>节点<code>temp</code>的后继，<strong>temp-&gt;next=pre</strong></p>
+</li>
+<li class="lvl-3">
+<p>更新<code>当前</code>节点<code>temp</code>的前驱pre，<strong>pre=temp</strong></p>
+</li>
+</ol>
+<h3 id="1-1-1-C-2">1.1.1 C++</h3>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">ListNode* <span class="title">ReverseList</span><span class="params">(ListNode* pHead)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(pHead==<span class="literal">nullptr</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> pHead;</span><br><span class="line">        &#125;</span><br><span class="line">        ListNode* pre = <span class="literal">nullptr</span>;</span><br><span class="line">        ListNode* temp = <span class="literal">nullptr</span>;</span><br><span class="line">        <span class="keyword">while</span>(pHead)&#123;</span><br><span class="line">            temp = pHead;</span><br><span class="line">            pHead = pHead-&gt;next;</span><br><span class="line">            temp-&gt;next = pre;</span><br><span class="line">            pre = temp;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> pre;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="1-2-拓展——单链表反转">1.2 拓展——单链表反转</h2>
+<h3 id="1-2-1-迭代反转">1.2.1 迭代反转</h3>
+<p>该算法的实现思想非常直接，就是从当前链表的<code>首元节点</code>开始，一直遍历至链表的最后一个节点，这期间会逐个改变所遍历到的节点的指针域，令其指向前一个节点。具体的实现方法也很简单，借助 3 个指针即可。首先我们定义 3 个指针并分别命名为 beg、mid、end。它们的初始指向如下图所示：<img src="/2021/08/03/nowcoder/img-20220816145015.png" alt="链表初始状态"><br>
+在上图的基础上，遍历链表的过程就等价为：<strong>3 个指针每次各向后移动一个节点</strong>，<strong>直至 mid 指向链表中最后一个节点</strong>（此时 end 为 NULL ）。</p>
+<div class="warning">
+<p>需要注意的是，<strong>这 3 个指针每移动之前，都需要做一步操作，即改变 mid 所指节点的指针域，令其指向和 beg 相同</strong>。</p>
+</div>
+<ol>
+<li class="lvl-3">
+<p>在上图的基础上，我们先改变 mid 所指节点的指针域指向，另其和 beg 相同（即改为 NULL），然后再将 3 个指针整体各向后移动一个节点。整个过程如下图所示：</p>
+</li>
+</ol>
+<p><img src="/2021/08/03/nowcoder/img-20220816145446.png" alt="迭代反转链表过程一"></p>
+<ol start="2">
+<li class="lvl-3">
+<p>在上图的基础上，先改变 mid 所指节点的指针域指向，令其和 beg 相同（指向节点 1 ），再将 3 个指针整体各向后移动一个节点。整个过程如下图所示：</p>
+</li>
+</ol>
+<p><img src="/2021/08/03/nowcoder/img-20220816145646.png" alt="迭代反转链表过程二"></p>
+<ol start="3">
+<li class="lvl-3">
+<p>在上图的基础上，先改变 mid 所指节点的指针域指向，令其和 beg 相同（指向节点 2 ），再将 3 个指针整体各向后移动一个节点。整个过程如下图所示：<br>
+<img src="/2021/08/03/nowcoder/img-20220816145731.png" alt="迭代反转链表过程三"></p>
+</li>
+<li class="lvl-3">
+<p>上图中，虽然 mid 指向了原链表最后一个节点，但显然整个反转的操作还差一步，即需要最后修改一次 mid 所指节点的指针域指向，令其和 beg 相同（指向节点 3）。如下图所示：<br>
+<img src="/2021/08/03/nowcoder/img-20220816145918.png" alt="迭代反转链表过程四"></p>
+</li>
+</ol>
+<div class="danger">
+<p>注意，这里只需改变 mid 所指节点的指向即可，不用修改 3 个指针的指向。</p>
+</div>
+<ol start="5">
+<li class="lvl-3">
+<p>最后只需改变 head 头指针的指向，令其和 mid 同向，就实现了链表的反转。</p>
+</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//迭代反转法，head 为无头节点链表的头指针</span></span><br><span class="line"><span class="function">link * <span class="title">iteration_reverse</span><span class="params">(link* head)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (head == <span class="literal">nullptr</span> || head-&gt;next == <span class="literal">nullptr</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> head;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        link * beg = <span class="literal">nullptr</span>;</span><br><span class="line">        link * mid = head;</span><br><span class="line">        link * end = head-&gt;next;</span><br><span class="line">        <span class="comment">//一直遍历</span></span><br><span class="line">        <span class="keyword">while</span> (<span class="number">1</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">//修改 mid 所指节点的指向</span></span><br><span class="line">            mid-&gt;next = beg;</span><br><span class="line">            <span class="comment">//此时判断 end 是否为 NULL，如果成立则退出循环</span></span><br><span class="line">            <span class="keyword">if</span> (end == <span class="literal">NULL</span>) &#123;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//整体向后移动 3 个指针</span></span><br><span class="line">            beg = mid;</span><br><span class="line">            mid = end;</span><br><span class="line">            end = end-&gt;next;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//最后修改 head 头指针的指向</span></span><br><span class="line">        head = mid;</span><br><span class="line">        <span class="keyword">return</span> head;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="1-2-2-头插法反转">1.2.2 头插法反转</h3>
+<p>头插法，在原有链表的基础上，<strong>依次将位于链表头部的节点摘下</strong>，然后采用<strong>从头部插入</strong>的方式生成一个新链表，则此链表即为原链表的反转版。</p>
+<ol>
+<li class="lvl-3">
+<p>创建一个新的空链表，如下图所示：<br>
+<img src="/2021/08/03/nowcoder/img-20220816150504.png" alt="创建空链表"></p>
+</li>
+<li class="lvl-3">
+<p>从原链表中摘除头部节点 1，并以头部插入的方式将该节点添加到新链表中，如下图：<br>
+<img src="/2021/08/03/nowcoder/img-20220816150537.png" alt="从原链表摘除节点 1，再添加到新链表中"></p>
+</li>
+<li class="lvl-3">
+<p>从原链表中摘除头部节点 2，以头部插入的方式将该节点添加到新链表中，如下图：<br>
+<img src="/2021/08/03/nowcoder/img-20220816150619.png" alt="从原链表摘除节点 2，再添加到新链表中"></p>
+</li>
+<li class="lvl-3">
+<p>继续重复以上工作，先后将节点 3、4 从原链表中摘除，并以头部插入的方式添加到新链表中，如下图：<br>
+<img src="/2021/08/03/nowcoder/img-20220816150652.png" alt="从原链表摘除节点 3、4，再添加到新链表中"></p>
+</li>
+</ol>
+<p>由此，就实现了对原链表的反转，<strong>新反转链表的头指针为 new_head</strong>。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">link * <span class="title">head_reverse</span><span class="params">(link * head)</span> </span>&#123;</span><br><span class="line">    link * new_head = <span class="literal">nullptr</span>;</span><br><span class="line">    link * temp = <span class="literal">nullptr</span>;  <span class="comment">// 备份</span></span><br><span class="line">    <span class="keyword">if</span> (head == <span class="literal">nullptr</span> || head-&gt;next == <span class="literal">nullptr</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> head;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">while</span> (head != <span class="literal">nullptr</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        temp = head;</span><br><span class="line">        <span class="comment">//将 temp 从 head 中摘除</span></span><br><span class="line">        head = head-&gt;next;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//将 temp 插入到 new_head 的头部</span></span><br><span class="line">        temp-&gt;next = new_head;</span><br><span class="line">        new_head = temp;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> new_head;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="1-2-3-就地逆置反转">1.2.3 就地逆置反转</h3>
+<p>就地逆置法和头插法的实现思想类似，唯一的区别在于，头插法是通过建立一个新链表实现的，而就地逆置法则是直接对原链表做修改，从而实现将原链表反转。值得一提的是，<strong>在原链表的基础上做修改，需要额外借助 2 个指针（假设分别为 beg 和 end）</strong>。</p>
+<ol>
+<li class="lvl-3">
+<p>初始状态下，令 beg 指向第一个节点，end 指向 beg-&gt;next，如下图所示：<br>
+<img src="/2021/08/03/nowcoder/img-20220816161058.png" alt="就地反转链表的初始状态"></p>
+</li>
+<li class="lvl-3">
+<p>将 end 所指节点 2 从链表上摘除，然后再添加至当前链表的头部。<br>
+<img src="/2021/08/03/nowcoder/img-20220816161142.png" alt="反转节点 2"></p>
+</li>
+<li class="lvl-3">
+<p>将 end 指向 beg-&gt;next，然后将 end 所指节点 3 从链表摘除，再添加到当前链表的头部<br>
+<img src="/2021/08/03/nowcoder/img-20220816161230.png" alt="反转节点 3"></p>
+</li>
+<li class="lvl-3">
+<p>将 end 指向 beg-&gt;next，再将 end 所示节点 4 从链表摘除，并添加到当前链表的头部<br>
+<img src="/2021/08/03/nowcoder/img-20220816161259.png" alt="反转节点 4"></p>
+</li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">link * <span class="title">local_reverse</span><span class="params">(link * head)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (head == <span class="literal">nullptr</span> || head-&gt;next == <span class="literal">nullptr</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> head;</span><br><span class="line">    &#125;</span><br><span class="line">    link * beg = <span class="literal">nullptr</span>;</span><br><span class="line">    link * end = <span class="literal">nullptr</span>;</span><br><span class="line">    beg = head;</span><br><span class="line">    end = head-&gt;next;</span><br><span class="line">    <span class="keyword">while</span> (end != <span class="literal">nullptr</span>) &#123;</span><br><span class="line">        <span class="comment">//将 end 从链表中摘除</span></span><br><span class="line">        beg-&gt;next = end-&gt;next;</span><br><span class="line">        <span class="comment">//将 end 移动至链表头</span></span><br><span class="line">        end-&gt;next = head;</span><br><span class="line">        head = end;</span><br><span class="line">        <span class="comment">//调整 end 的指向，令其指向 beg 后的一个节点，为反转下一个节点做准备</span></span><br><span class="line">        end = beg-&gt;next;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> head;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<div class="warning">
+<p>循环体中并没有涉及对beg本身的更新（<strong>只是对beg所指的物理实体的后继阈更新</strong>），也就是说beg的指向始终没变，但是end的指向有变化，head的指向也有变化。</p>
+</div>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">小王同学</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://morvan.top/2021/08/03/nowcoder/">https://morvan.top/2021/08/03/nowcoder/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://morvan.top">小王同学的精神驿站</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/newcoder/">newcoder</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2021/08/17/%E8%B5%B0%E5%A5%BD%E6%96%B0%E7%9A%84%E8%B5%B6%E8%80%83%E4%B9%8B%E8%B7%AF/"><i class="fa fa-chevron-left">  </i><span>走好新的赶考之路</span></a></div><div class="next-post pull-right"><a href="/2021/08/02/Chuhaiba/"><span>Chuhaiba</span><i class="fa fa-chevron-right"></i></a></div></nav><div id="disqus_thread"></div><script>var unused = null;
+var disqus_config = function () {
+  this.page.url = 'https://morvan.top/2021/08/03/nowcoder/';
+  this.page.identifier = '2021/08/03/nowcoder/';
+  this.page.title = '牛客网刷题记录';
+}
+var d = document, s = d.createElement('script');
+s.src = "https://" + 'cholen' +".disqus.com/embed.js";
+s.setAttribute('data-timestamp', '' + +new Date());
+(d.head || d.body).appendChild(s);</script><script id="dsq-count-scr" src="https://cholen.disqus.com/count.js" async></script></div></div><footer class="footer-bg" style="background-image: url(/img/wallhaven-8ogod1.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2015 - 2023 By 小王同学</div><div class="footer_custom_text">hitokoto</div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.9.0"></script><script src="/js/fancybox.js?version=1.9.0"></script><script src="/js/sidebar.js?version=1.9.0"></script><script src="/js/copy.js?version=1.9.0"></script><script src="/js/fireworks.js?version=1.9.0"></script><script src="/js/transition.js?version=1.9.0"></script><script src="/js/scroll.js?version=1.9.0"></script><script src="/js/head.js?version=1.9.0"></script><script src="/js/search/algolia.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script src="/js/katex.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="algolia-search"><div class="search-dialog__title" id="algolia-search-title">Algolia</div><div id="algolia-input-panel"><div id="algolia-search-input"></div></div><hr><div id="algolia-search-results"><div id="algolia-hits"></div><div id="algolia-pagination"></div><div id="algolia-stats"></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>
